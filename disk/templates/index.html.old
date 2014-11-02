@@ -1,0 +1,21 @@
+<html>
+    <head><title>server</title></head>
+    <body>
+        <style>
+            table{
+                border="1";
+                }
+        </style>
+
+        <table width="100%" border="1">
+            <tr><th>servername</th><th>partitionname</th><th>bsize</th><th>fsize</th><th>sharename</th><th>sharepath</th></tr>
+    {% for se in server %}
+    {% for pa in part %}
+    {% for sh in share %}
+    <tr><td>{{se.servername}}</td><td>{{pa.partitioname}}</td><td>{{pa.basicsize}}</td><td>{{pa.freesize}}</td><td>{{sh.sharename}}</td><td>{{sh.sharepath}}</td></tr>
+        {% endfor %}
+        {% endfor %}
+        {% endfor %}
+    </table>
+    </body>
+</html>
