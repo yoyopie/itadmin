@@ -12,7 +12,7 @@ def index(request):
             'serverform': serverform,
             'server': server,
             }
-    return render_to_response('index.html', context)
+    return render_to_response('admin.html', context)
 
 def show(request):
     selectval = request.GET.get('selectval', '')
