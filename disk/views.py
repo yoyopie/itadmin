@@ -14,6 +14,17 @@ def index(request):
             }
     return render_to_response('index.html', context)
 
+def show(request):
+    selectval = request.GET.get('selectval', '')
+    if selectval == 'Allserver':
+        server = models.Server.objects.all()
+    else:
+        server = models.Server.objects.filter(servername=selectval)
+    context = {
+            'server':server,
+            }
+    return render_to_response('data.html', context)
+
 def adddata(request):
     with open('/home/yoyo/study/itadmin/disk/out.txt') as fp:
         for line in fp.readlines():

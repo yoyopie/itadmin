@@ -1,17 +1,46 @@
 <html>
-    <head><title>server</title></head>
+    <head><title>server</title>
+        <!-- 新 Bootstrap 核心 CSS 文件 -->
+        <link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/3.3.0/css/bootstrap.min.css">
+
+        <!-- 可选的Bootstrap主题文件（一般不用引入） -->
+        <link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/3.3.0/css/bootstrap-theme.min.css">
+
+        <!-- jQuery文件。务必在bootstrap.min.js 之前引入 -->
+        <script src="http://cdn.bootcss.com/jquery/1.11.1/jquery.min.js"></script>
+
+        <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
+        <script src="http://cdn.bootcss.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+
+    </head>
     <body>
-        <style>
-            table{
-                border="1";
-                }
-        </style>
-        <table width="100%" border="1">
-            <tr><th><select name="sever"><option value="" selected="selected">Allserver</option>
+        <script type="text/javascript">
+          $(document).ready(function(){
+                  $("#server").change(function(){
+                      var $selectval=$(this).val();
+                      $.ajax({
+                          url:'/show/',
+                          type:'get',
+                          data:{'selectval':$selectval},
+                          success:function(data){
+                                 $('#data').html(data);
+                          }
+                          });
+                      });
+                  }); 
+        </script>
+        <div>
+            <label>请选择要查询的服务器，默认显示所有</label>
+            <select name="sever" id="server"><option value="Allserver" selected="selected">Allserver</option>
                         {% for se in server %}
                         <option value="{{se.servername}}">{{se.servername}}</option>
                         {% endfor %}
-                </select></th>
+                    </select>
+            <select name="time" id="time"><option value="data" selected="Data">Data</option></select>
+                </div>
+                <div id="data">
+        <table class="table table-hover">
+            <tr><th>servername</th>
                 <th>partitionname</th><th>bsize</th><th>fsize</th><th>sharename</th>
                 <th>sharepath</th></tr>
     {% for se in server %}
@@ -23,5 +52,6 @@
         {% endfor %}
         {% endfor %}
     </table>
+</div>
     </body>
 </html>
