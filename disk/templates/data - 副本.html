@@ -6,8 +6,9 @@
 
 <tr>
 			{% for server in savedate %}
-            <td rowspan="{{ server | count_share }}">{{server.servername}}</td>
-            {% for part in server.partition.all %}
+			{% for se in server.server.all %}
+            <td rowspan="{{ se | count_share }}">{{se.servername}}</td>
+            {% for part in se.partition.all %}
             <td rowspan="{{ part.share.count }}">{{part.partitioname}}</td>
             <td rowspan="{{ part.share.count }}">{{part.basicsize}}</td>
             <td rowspan="{{ part.share.count }}">{{part.freesize}}</td>
@@ -18,6 +19,7 @@
         {% endfor %}
         {% endfor %}
         {% endfor %}
+		{% endfor %}
 
     </tr>
     </table>

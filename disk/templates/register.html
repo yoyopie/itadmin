@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% load disk_extras %}
+{% block title %}Register{% endblock title %}
+{% block lie2 %}<li class="active">{% endblock lie2 %}
+{% block page-title %}Register{% endblock page-title %}
+
+
+
+
+{% block javascript %}
+                <script type="text/javascript">
+          $(document).ready(function(){
+                  $("#username").blur(function(){
+                      var $userinput=$(this).val();
+                      $.ajax({
+                          url:'/check/',
+                          type:'get',
+                          data:{'userinput':$userinput},
+                          success:function(data){
+                                 $('#check').html(data);
+                          }
+                          });
+                      });
+                  }); 
+        </script>
+	{% endblock javascript %}
+	{% block showsome %}
+	
+    <div class="span3">
+      <div class="filters">
+        <input type="checkbox" id="cb3" checked="checked" />
+        <label for="cb3">Ad</label>
+		<label for="cb3">域账号</label>
+		<label for="cb3">为基本</label>
+		<label for="cb3">账号</label>
+
+      </div>
+
+    </div>
+
+        <form method="POST">       
+          <div class="row">
+	                    <div id="check"></div>
+                        <div>
+						<label>username</label><input name="username" id="username" type="text" /><select name="ou" id="ou"><option value="ou" selected="ou">OU</option><option value="test" selected="test">test</option><option value="Users" selected="Users">Users</option></select>
+						<input type="submit" name="submit" value="Create" class="btn">
+						</div>
+          </div>
+		  <hr />
+
+
+		  {% endblock showsome %}

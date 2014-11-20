@@ -1,27 +1,20 @@
-<html>
-    <head><title>server</title>
-        <!-- 新 Bootstrap 核心 CSS 文件 -->
-        <link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/3.3.0/css/bootstrap.min.css">
-
-        <!-- 可选的Bootstrap主题文件（一般不用引入） -->
-        <link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/3.3.0/css/bootstrap-theme.min.css">
-
-        <!-- jQuery文件。务必在bootstrap.min.js 之前引入 -->
-        <script src="http://cdn.bootcss.com/jquery/1.11.1/jquery.min.js"></script>
-
-        <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
-        <script src="http://cdn.bootcss.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
-
-    </head>
-    <body>
+{% extends "base.html" %}
+{% load disk_extras %}
+{% block title %}Windisk{% endblock title %}
+{% block lie1 %}<li class="active">{% endblock lie1 %}
+{% block page-title %}Windisk{% endblock page-title %}
+{% block javascript %}
         <script type="text/javascript">
           $(document).ready(function(){
-                  $("#server").change(function(){
-                      var $selectval=$(this).val();
+                  $(".selected").change(function(){
+                      var $servername=$("#server").val();
+					  var $time=$("#time").val();
                       $.ajax({
                           url:'/show/',
                           type:'get',
-                          data:{'selectval':$selectval},
+                          data:{'servername':$servername,
+						        'time':$time,
+						  },
                           success:function(data){
                                  $('#data').html(data);
                           }
@@ -29,29 +22,46 @@
                       });
                   }); 
         </script>
-        <div>
+{% endblock javascript %}
+{% block showsome %}
+<div>
             <label>请选择要查询的服务器，默认显示所有</label>
-            <select name="sever" id="server"><option value="Allserver" selected="selected">Allserver</option>
-                        {% for se in server %}
+            <select name="sever" id="server" class="selected"><option value="Allserver" selected="selected">Allserver</option>
+
+						{% for se in server %}
                         <option value="{{se.servername}}">{{se.servername}}</option>
                         {% endfor %}
+
                     </select>
-            <select name="time" id="time"><option value="data" selected="Data">Data</option></select>
+            <select name="time" id="time" class="selected">
+			            {% for server in savedate%}
+                        <option value="{{server.date}}" selected="selected">{{server.date}}</option>
+                        {% endfor %}
+			</select>
                 </div>
-                <div id="data">
-        <table class="table table-hover">
+        <div id="data" class="states"> 
+        <table class="table table-hover" border="1">
             <tr><th>servername</th>
                 <th>partitionname</th><th>bsize</th><th>fsize</th><th>sharename</th>
                 <th>sharepath</th></tr>
-    {% for se in server %}
-    {% for part in se.partition.all %}
-    {% for sh in part.share.all %}
-    <tr><td>{{se.servername}}</td><td>{{part.partitioname}}</td><td>{{part.basicsize}}</td><td>{{part.freesize}}</td>
-        <td>{{sh.sharename}}</td><td>{{sh.sharepath}}</td></tr>
+
+<tr>
+            {% for server in savedate %}
+			{% for se in server.server.all %}
+            <td rowspan="{{ se | count_share }}">{{se.servername}}</td>
+            {% for part in se.partition.all %}
+            <td rowspan="{{ part.share.count }}">{{part.partitioname}}</td>
+            <td rowspan="{{ part.share.count }}">{{part.basicsize}}</td>
+            <td rowspan="{{ part.share.count }}">{{part.freesize}}</td>
+            {% for sh in part.share.all %}
+            <td>{{sh.sharename}}</td>
+            <td>{{sh.sharepath}}</td>
+    </tr><tr>
         {% endfor %}
         {% endfor %}
         {% endfor %}
+		{% endfor %}
+    </tr>
     </table>
-</div>
-    </body>
-</html>
+        </div>
+{% endblock showsome %}
